@@ -1,14 +1,11 @@
 package funeralrecordsystem;
 
-
-import funeralrecordsystem.Clients;
-import funeralrecordsystem.Deceased;
-import funeralrecordsystem.FuneralDetails;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FuneralRecordSystem {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         Scanner sc = new Scanner(System.in);
         boolean running = true;
@@ -20,16 +17,16 @@ public class FuneralRecordSystem {
             System.out.println("1. CLIENTS");
             System.out.println("2. DECEASED");
             System.out.println("3. FUNERAL DETAILS");
-            System.out.println("4. VIEW");
+            System.out.println("4. VIEW RECORDS");
             System.out.println("5. EXIT");
 
             System.out.print("Enter Action: ");
             int action = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine(); // Consume newline
 
             switch (action) {
                 case 1:
-                    Clients cl = new Clients(); 
+                    Clients cl = new Clients();
                     cl.cTransaction();
                     break;
                 case 2:
@@ -42,7 +39,8 @@ public class FuneralRecordSystem {
                     break;
                 case 4:
                     
-                     
+                    ViewRecords vr = new ViewRecords();
+                    vr.recordsMenu();
                     break;
                 case 5:
                     System.out.print("Exit Selected... Type 'yes' to confirm: ");
@@ -60,5 +58,4 @@ public class FuneralRecordSystem {
         sc.close();
         System.out.println("Exiting Funeral Record Tracker. Goodbye!");
     }
-    
 }

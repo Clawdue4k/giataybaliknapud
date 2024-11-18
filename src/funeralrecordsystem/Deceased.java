@@ -1,8 +1,10 @@
-
 package funeralrecordsystem;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
-
 
 public class Deceased {
     private Scanner sc = new Scanner(System.in); 
@@ -27,7 +29,7 @@ public class Deceased {
 
             System.out.print("Enter selection: ");
             int act = sc.nextInt();
-            sc.nextLine();  // Clear the newline character after nextInt()
+            sc.nextLine(); // Clear the newline character after nextInt()
             Deceased de = new Deceased();
             switch (act) {
                 case 1:
@@ -60,6 +62,7 @@ public class Deceased {
 
         } while (response.equalsIgnoreCase("yes"));
     }
+
     public void addDeceased() {
         System.out.print("Deceased Full Name: ");
         String dfullname = sc.nextLine();
@@ -76,6 +79,8 @@ public class Deceased {
         config cons = new config();
         cons.addRecord(qry, dfullname, dob, dod, pod, cod);
     }
+
+    // Refers to the viewDeceasedview method, similar to Clients class
     public void viewDeceased() {
         String qry = "SELECT * FROM tbl_deceased";
         String[] headers = {"ID", "Name", "Date of Birth", "Date of Death", "Place of Death", "Cause of Death"};
@@ -83,20 +88,21 @@ public class Deceased {
         config cons = new config();
         cons.viewRecords(qry, headers, columns);
     }
+
     public void updateDeceased() {
         System.out.print("Enter ID to Update: ");
         int id = sc.nextInt();
-        sc.nextLine();  
-        
+        sc.nextLine();  // Clear the buffer
+
         config cons = new config();
         while (cons.getSingleValue("SELECT d_id FROM tbl_deceased WHERE d_id = ?", id) == 0) {
             System.out.println("Selected ID does not exist.");
-            System.out.print("Select Clients ID Again: ");
+            System.out.print("Select Deceased ID Again: ");
             id = sc.nextInt();
             sc.nextLine();  
         }
 
-        System.out.print("Update Deaceased Name: ");
+        System.out.print("Update Deceased Name: ");
         String dfullname = sc.nextLine();
         System.out.print("Update Date of Birth: ");
         String dob = sc.nextLine();
@@ -110,23 +116,55 @@ public class Deceased {
         String qry = "UPDATE tbl_deceased SET d_flname = ?, d_dob = ?, d_dod = ?, d_pod = ?, d_cod = ? WHERE d_id = ?";
         cons.updateRecord(qry, dfullname, dob, dod, pod, cod, id);
     }
-    public void deleteDeceased(){
+
+    public void deleteDeceased() {
         Scanner sc = new Scanner(System.in);
-        config confi = new config();
+        config cons = new config();
         System.out.print("Enter ID to Delete: ");
         int id = sc.nextInt();
-        
-        while (confi.getSingleValue("SELECT d_id FROM tbl_deceased WHERE d_id = ?", id) == 0) {
+
+        while (cons.getSingleValue("SELECT d_id FROM tbl_deceased WHERE d_id = ?", id) == 0) {
             System.out.println("Selected ID does not exist.");
             System.out.print("Select Deceased ID Again: ");
             id = sc.nextInt();
             sc.nextLine();
         }
-        
+
         String qry = "DELETE FROM tbl_deceased WHERE d_id = ?";
-        confi.deleteRecord(qry, id);
-        
+        cons.deleteRecord(qry, id);
     }
 
-    
+    // Method to view deceased by ID (similar to viewClientsview)
+    public void viewDeceasedview() throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the Deceased ID to view: ");
+        int deceasedId = sc.nextInt();
+        sc.nextLine();  // Clear the buffer
+
+        String qry = "SELECT * FROM tbl_deceased WHERE d_id = ?";
+        config cons = new config();
+
+        System.out.println("--------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-20s | %-20s | %-20s | %-20s | %-20s |\n", "ID", "Name", "Date of Birth", "Date of Death", "Cause of Death");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------");
+
+        try (Connection conn = cons.connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(qry)) {
+            pstmt.setInt(1, deceasedId);  // Set the deceasedId parameter
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("d_id");
+                String name = rs.getString("d_flname");
+                String dob = rs.getString("d_dob");
+                String dod = rs.getString("d_dod");
+                String cod = rs.getString("d_cod");
+                System.out.printf("| %-20d | %-20s | %-20s | %-20s | %-20s |\n", id, name, dob, dod, cod);
+            } else {
+                System.out.println("No deceased record found with ID: " + deceasedId);
+            }
+
+            System.out.println("--------------------------------------------------------------------------------------------------------------------");
+        }
+    }
 }

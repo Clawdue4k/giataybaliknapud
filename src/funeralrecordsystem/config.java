@@ -201,4 +201,8 @@ public class config {
         return result;
     }
 
+    void viewRecords(String qry, String[] headers, String[] columns, int deceasedId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

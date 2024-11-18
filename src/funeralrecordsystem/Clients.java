@@ -1,6 +1,10 @@
 
 package funeralrecordsystem;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -118,8 +122,39 @@ public class Clients {
         
     }
 
-    public void viewClientDetails(int clientId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public void viewClientsview() throws SQLException {
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Enter the Client ID to view: ");
+    int clientId = sc.nextInt();
+    sc.nextLine();  // Clear the buffer
+
+    String qry = "SELECT * FROM tbl_clients WHERE c_id = ?";
+    config cons = new config();
+
+    System.out.println("--------------------------------------------------------------------");
+    System.out.printf("| %-20s | %-20s | %-20s |\n", "ID", "Name", "Contact Number");
+    System.out.println("--------------------------------------------------------------------");
+
+    
+    try (Connection conn = cons.connectDB();
+         PreparedStatement pstmt = conn.prepareStatement(qry)) {
+        pstmt.setInt(1, clientId);  // Set the clientId parameter
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            
+            int id = rs.getInt("c_id");
+            String name = rs.getString("c_name");
+            String contactNumber = rs.getString("c_connum");
+            System.out.printf("| %-20d | %-20s | %-20s |\n", id, name, contactNumber);
+        } else {
+            
+            System.out.println("No client found with ID: " + clientId);
+        }
+
+    System.out.println("--------------------------------------------------------------------");
     }
+
+  }
 }
 
