@@ -28,33 +28,48 @@ public class Deceased {
             System.out.println(" ----------------------");
 
             System.out.print("Enter selection: ");
-            int act = sc.nextInt();
-            sc.nextLine(); // Clear the newline character after nextInt()
-            Deceased de = new Deceased();
-            switch (act) {
-                case 1:
-                    addDeceased();
-                    viewDeceased();
-                    break;
-                case 2:
-                    viewDeceased();
-                    break;
-                case 3:
-                    viewDeceased();
-                    updateDeceased();
-                    viewDeceased();
-                    break;
-                case 4:
-                    viewDeceased();
-                    deleteDeceased();
-                    viewDeceased();
-                    break;
-                case 5:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid selection. Please try again.");
-                    break;
+
+           
+            while (true) {
+                if (sc.hasNextInt()) {
+                    int act = sc.nextInt();
+                    sc.nextLine(); 
+                    if (act >= 1 && act <= 5) {
+                        switch (act) {
+                            case 1:
+                                addDeceased();
+                                viewDeceased();
+                                break;
+                            case 2:
+                                viewDeceased();
+                                break;
+                            case 3:
+                                viewDeceased();
+                                updateDeceased();
+                                viewDeceased();
+                                break;
+                            case 4:
+                                viewDeceased();
+                                deleteDeceased();
+                                viewDeceased();
+                                break;
+                            case 5:
+                                System.out.println("Exiting...");
+                                return;
+                            default:
+                                System.out.println("Invalid selection. Please try again.");
+                                break;
+                        }
+                        break;  
+                    } else {
+                        System.out.println("Invalid selection. Please enter a number between 1 and 5.");
+                        System.out.print("Enter selection: ");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                    sc.next(); 
+                    System.out.print("Enter selection: ");
+                }
             }
 
             System.out.print("Do you want to continue? (yes/no): ");
@@ -80,7 +95,6 @@ public class Deceased {
         cons.addRecord(qry, dfullname, dob, dod, pod, cod);
     }
 
-    // Refers to the viewDeceasedview method, similar to Clients class
     public void viewDeceased() {
         String qry = "SELECT * FROM tbl_deceased";
         String[] headers = {"ID", "Name", "Date of Birth", "Date of Death", "Place of Death", "Cause of Death"};
@@ -92,7 +106,7 @@ public class Deceased {
     public void updateDeceased() {
         System.out.print("Enter ID to Update: ");
         int id = sc.nextInt();
-        sc.nextLine();  // Clear the buffer
+        sc.nextLine(); 
 
         config cons = new config();
         while (cons.getSingleValue("SELECT d_id FROM tbl_deceased WHERE d_id = ?", id) == 0) {
@@ -134,12 +148,11 @@ public class Deceased {
         cons.deleteRecord(qry, id);
     }
 
-    // Method to view deceased by ID (similar to viewClientsview)
     public void viewDeceasedview() throws SQLException {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the Deceased ID to view: ");
         int deceasedId = sc.nextInt();
-        sc.nextLine();  // Clear the buffer
+        sc.nextLine();  
 
         String qry = "SELECT * FROM tbl_deceased WHERE d_id = ?";
         config cons = new config();
@@ -150,7 +163,7 @@ public class Deceased {
 
         try (Connection conn = cons.connectDB();
              PreparedStatement pstmt = conn.prepareStatement(qry)) {
-            pstmt.setInt(1, deceasedId);  // Set the deceasedId parameter
+            pstmt.setInt(1, deceasedId); 
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
