@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class FuneralDetails {
 
     private Scanner sc = new Scanner(System.in); 
+    private Object cons;
 
     public void fdTransaction() {
         String response;
@@ -26,31 +27,29 @@ public class FuneralDetails {
 
             System.out.print("Enter selection: ");
 
-            // Validate input to ensure it's an integer within the valid range
             while (true) {
                 if (sc.hasNextInt()) {
                     int act = sc.nextInt();
-                    sc.nextLine(); // Consume newline
+                    sc.nextLine();
 
                     if (act >= 1 && act <= 5) {
-                        // Valid input, process the action
                         switch (act) {
                             case 1:
                                 addFuneral();
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 break;
                             case 2:
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 break;
                             case 3:
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 updateFuneral();
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 break;
                             case 4:
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 deleteFuneral();
-                                viewFuneral();
+                                viewAllFuneralRecords();  // Renamed method
                                 break;
                             case 5:
                                 System.out.println("Exiting...");
@@ -59,15 +58,14 @@ public class FuneralDetails {
                                 System.out.println("Invalid selection. Please try again.");
                                 break;
                         }
-                        break;  // Exit the loop if the input is valid
+                        break; 
                     } else {
                         System.out.println("Invalid selection. Please enter a number between 1 and 5.");
                         System.out.print("Enter selection: ");
                     }
                 } else {
-                    // If the user input isn't an integer, ask again
                     System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                    sc.next(); // Clear the invalid input
+                    sc.next(); 
                     System.out.print("Enter selection: ");
                 }
             }
@@ -81,32 +79,30 @@ public class FuneralDetails {
     public void addFuneral() {
         config cons = new config();
 
-        // Validate Client ID
         Clients cl = new Clients();
         cl.viewClients();
         System.out.print("Enter the selected ID of the Client: ");
         int cid = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        sc.nextLine(); 
 
         String csql = "SELECT c_id FROM tbl_clients WHERE c_id = ?";
         while (cons.getSingleValue(csql, cid) == 0) {
             System.out.print("Client does not exist, select again: ");
             cid = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine(); 
         }
 
-        // Validate Deceased ID
         Deceased de = new Deceased();
         de.viewDeceased();
         System.out.print("Enter the selected ID of the Deceased: ");
         int did = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        sc.nextLine(); 
 
         String dsql = "SELECT d_id FROM tbl_deceased WHERE d_id = ?";
         while (cons.getSingleValue(dsql, did) == 0) {
             System.out.print("Deceased does not exist, select again: ");
             did = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine(); 
         }
 
         System.out.print("Name of Funeral Service Provider: ");
@@ -118,7 +114,8 @@ public class FuneralDetails {
         System.out.println("Funeral details added successfully!");
     }
 
-    public void viewFuneral() {
+   
+    public void viewAllFuneralRecords() {
         String qry = "SELECT f_id, c_name, c_connum, d_flname, d_dob, d_dod, d_cod, f_fservice " +
                      "FROM tbl_fd " +
                      "LEFT JOIN tbl_clients ON tbl_clients.c_id = tbl_fd.c_id " +
@@ -133,17 +130,15 @@ public class FuneralDetails {
     public void updateFuneral() {
         config cons = new config();
 
-        // Validate Funeral ID
         System.out.print("Enter the Funeral ID to update: ");
         int fid = sc.nextInt();
-        sc.nextLine(); // Consume newline
-
+        sc.nextLine(); 
+        
         String fsql = "SELECT f_id FROM tbl_fd WHERE f_id = ?";
         if (cons.getSingleValue(fsql, fid) == 0) {
             System.out.println("Funeral ID not found.");
             return;
         }
-
         System.out.print("Enter new Funeral Service Provider name: ");
         String newFservice = sc.nextLine();
 
@@ -156,10 +151,9 @@ public class FuneralDetails {
     public void deleteFuneral() {
         config cons = new config();
 
-        // Validate Funeral ID
         System.out.print("Enter the Funeral ID to delete: ");
         int fid = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        sc.nextLine(); 
 
         String fsql = "SELECT f_id FROM tbl_fd WHERE f_id = ?";
         if (cons.getSingleValue(fsql, fid) == 0) {
@@ -172,8 +166,5 @@ public class FuneralDetails {
 
         System.out.println("Funeral details deleted successfully!");
     }
-
-    public void viewFuneralDetails() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    
 }

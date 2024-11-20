@@ -148,36 +148,5 @@ public class Deceased {
         cons.deleteRecord(qry, id);
     }
 
-    public void viewDeceasedview() throws SQLException {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the Deceased ID to view: ");
-        int deceasedId = sc.nextInt();
-        sc.nextLine();  
-
-        String qry = "SELECT * FROM tbl_deceased WHERE d_id = ?";
-        config cons = new config();
-
-        System.out.println("--------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-20s | %-20s | %-20s | %-20s | %-20s |\n", "ID", "Name", "Date of Birth", "Date of Death", "Cause of Death");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------");
-
-        try (Connection conn = cons.connectDB();
-             PreparedStatement pstmt = conn.prepareStatement(qry)) {
-            pstmt.setInt(1, deceasedId); 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                int id = rs.getInt("d_id");
-                String name = rs.getString("d_flname");
-                String dob = rs.getString("d_dob");
-                String dod = rs.getString("d_dod");
-                String cod = rs.getString("d_cod");
-                System.out.printf("| %-20d | %-20s | %-20s | %-20s | %-20s |\n", id, name, dob, dod, cod);
-            } else {
-                System.out.println("No deceased record found with ID: " + deceasedId);
-            }
-
-            System.out.println("--------------------------------------------------------------------------------------------------------------------");
-        }
-    }
+    
 }
