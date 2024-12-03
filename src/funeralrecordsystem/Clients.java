@@ -81,8 +81,24 @@ public class Clients {
         System.out.print("Client's Name: ");
         String cname = sc.nextLine();
 
-        System.out.print("Contact Number: ");
-        String conum = sc.nextLine();
+        String conum;
+        while (true) {
+            System.out.print("Contact Number: ");
+            conum = sc.nextLine();
+
+            if (!conum.startsWith("09")) {
+                System.out.println("Invalid Contact number. Contact mumber must start with '09'.");
+            } 
+            else if (conum.length() < 10) {
+                System.out.println("Contact number is too short.");
+            } else if (conum.length() > 12) {
+                System.out.println("Contact number is too long.");
+            } else if (!conum.matches("\\d+")) {
+                System.out.println("Invalid contact number. Please enter only digits.");
+            } else {
+                break; 
+            }
+        }
 
         String qry = "INSERT INTO tbl_clients (c_name, c_connum) VALUES (?, ?)";
         config cons = new config();
@@ -113,8 +129,24 @@ public class Clients {
         System.out.print("Client's Name: ");
         String cname = sc.nextLine();
 
-        System.out.print("Contact Number: ");
-        String conum = sc.nextLine();
+        String conum;
+        while (true) {
+            System.out.print("Contact Number: ");
+            conum = sc.nextLine();
+
+            if (!conum.startsWith("09")) {
+                System.out.println("Invali Contact number. Contact mumber must start with '09'.");
+            } 
+            else if (conum.length() < 10) {
+                System.out.println("Contact number is too short.");
+            } else if (conum.length() > 12) {
+                System.out.println("Contact number is too long.");
+            } else if (!conum.matches("\\d+")) {
+                System.out.println("Invalid contact number. Please enter only digits.");
+            } else {
+                break; 
+            }
+        }
 
         String qry = "UPDATE tbl_clients SET c_name = ?, c_connum = ? WHERE c_id = ?";
         cons.updateRecord(qry, cname, conum, id);
@@ -135,7 +167,4 @@ public class Clients {
         String qry = "DELETE FROM tbl_clients WHERE c_id = ?";
         cons.deleteRecord(qry, id);
     }
-
-    
-    
 }

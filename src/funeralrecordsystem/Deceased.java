@@ -29,7 +29,6 @@ public class Deceased {
 
             System.out.print("Enter selection: ");
 
-           
             while (true) {
                 if (sc.hasNextInt()) {
                     int act = sc.nextInt();
@@ -81,10 +80,31 @@ public class Deceased {
     public void addDeceased() {
         System.out.print("Deceased Full Name: ");
         String dfullname = sc.nextLine();
-        System.out.print("Date of Birth: ");
-        String dob = sc.nextLine();
-        System.out.print("Date of Death: ");
-        String dod = sc.nextLine();
+
+        // Validate Date of Birth
+        String dob;
+        while (true) {
+            System.out.print("Date of Birth (YYYY-MM-DD): ");
+            dob = sc.nextLine();
+            if (!dob.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            } else {
+                break; 
+            }
+        }
+
+        // Validate Date of Death
+        String dod;
+        while (true) {
+            System.out.print("Date of Death (YYYY-MM-DD): ");
+            dod = sc.nextLine();
+            if (!dod.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            } else {
+                break;
+            }
+        }
+
         System.out.print("Place of Death: ");
         String pod = sc.nextLine();
         System.out.print("Cause of Death: ");
@@ -118,10 +138,31 @@ public class Deceased {
 
         System.out.print("Update Deceased Name: ");
         String dfullname = sc.nextLine();
-        System.out.print("Update Date of Birth: ");
-        String dob = sc.nextLine();
-        System.out.print("Update Date of Death: ");
-        String dod = sc.nextLine();
+
+        // Validate Date of Birth
+        String dob;
+        while (true) {
+            System.out.print("Update Date of Birth (YYYY-MM-DD): ");
+            dob = sc.nextLine();
+            if (!dob.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            } else {
+                break; 
+            }
+        }
+
+        // Validate Date of Death
+        String dod;
+        while (true) {
+            System.out.print("Update Date of Death (YYYY-MM-DD): ");
+            dod = sc.nextLine();
+            if (!dod.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            } else {
+                break;
+            }
+        }
+
         System.out.print("Update Place of Death: ");
         String pod = sc.nextLine();
         System.out.print("Update Cause of Death: ");
@@ -147,6 +188,4 @@ public class Deceased {
         String qry = "DELETE FROM tbl_deceased WHERE d_id = ?";
         cons.deleteRecord(qry, id);
     }
-
-    
 }
